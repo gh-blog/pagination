@@ -1,7 +1,7 @@
 {
   "name": "gh-blog-pagination",
   "version": "0.0.0",
-  "description": "Pagionation plugin for gh-blog.",
+  "description": "Basic pagionation plugin for gh-blog.",
   "main": "index.coffee",
   "scripts": {
     "test": "mocha test.coffee"
