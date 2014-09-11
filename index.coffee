@@ -15,41 +15,50 @@ module.exports = (options = { postsPerPage: 5 }) ->
 
     processFile = (file, enc, done) ->
         if file.isPost
-            posts.push { id: file.id, created: file.created?.date }
+            posts.push file
+            done null, null
 
-        done null, file
+        else done null, file
 
     through2.obj processFile, (done) ->
         pages = []
 
         # Sort by creation date
-        posts = sort posts, dateComparator
+        posts =
+            sort(posts, dateComparator)
+            .map (post, index, collection) ->
+                # Add previous and next post
+                if index > 0
+                    post.prev = collection[index - 1]
+                if index < collection.length - 1
+                    post.next = collection[index + 1]
+                post
 
         # _num_total = Math.ceil posts.length / postsPerPage
         # console.log "Total pages: #{_num_total}" @TODO: log info
-        
+
         _page_num = 0
         for post, i in posts by postsPerPage
             pages[_page_num] = []
 
             pages[_page_num] =
                 posts[i...i + postsPerPage]
-                .map (post) ->
-                    post.page = _page_num
+                .map (post) =>
+                    post.page = _page_num + 1
+                    @push post
                     post
 
             _page_num += 1
 
-        for page, i in pages
-            console.log(post.created?.getTime() || 0, post.id, i) for post in page
+        for page, page_index in pages
+            file = new File {
+                path: "../pages/#{page_index + 1}.html"
+            }
 
-        indexFile = new File {
-            path: 'index.json'
-            contents: new Buffer JSON.stringify pages
-        }
+            file.data = page
+            file.index = page_index
+            file.isIndexPage = yes
 
-        indexFile.isIndex = yes
-
-        @push indexFile
+            @push file
 
         done()
