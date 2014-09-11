@@ -26,5 +26,9 @@
     "lodash.sortby": "^2.4.1",
     "through2": "^0.6.1",
     "vinyl": "^0.4.2"
+  },
+  "gh-blog": {
+    "requires": ["info"],
+    "provides": ["index", "pagination"]
   }
 }
