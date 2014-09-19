@@ -1,6 +1,6 @@
 {
   "name": "gh-blog-pagination",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Basic pagionation plugin for gh-blog.",
   "main": "index.coffee",
   "scripts": {
